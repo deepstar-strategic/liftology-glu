@@ -58,9 +58,15 @@ exports.handler = async function (event, context, callback) {
         body: JSON.stringify(HSSearch),
       })
 
+      const data = await res.json()
+
       console.log("==fetch==")
       console.log(JSON.stringify(res))
       console.log("==fetch==")
+
+      console.log("==data==")
+      console.log(JSON.stringify(data))
+      console.log("==data==")
     } catch (err) {
       console.log("couldn't find HS contact")
       console.log(err)
