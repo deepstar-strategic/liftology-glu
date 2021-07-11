@@ -98,7 +98,7 @@ exports.handler = async function (event, context, callback) {
     console.log(err)
     return callback(null, {
       statusCode: 200,
-      ContentType: "text/html",
+      contentType: "text/html",
       body: "<html><title>title</title><body>" + console.log(err) + "</body></html>,",
     })
   }
