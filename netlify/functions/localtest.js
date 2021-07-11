@@ -13,15 +13,15 @@
 // const SGToEmail = process.env.SG_TO_EMAIL
 // const sgMail = require("@sendgrid/mail")
 
-// const HSKEY = process.env.HSKEY
-// const HSContacts = "https://api.hubapi.com/crm/v3/objects/contacts/search"
+const HSKEY = process.env.HSKEY
+const HSContacts = "https://api.hubapi.com/crm/v3/objects/contacts/search"
 
-// const fetch = require("node-fetch")
+const fetch = require("node-fetch")
 
 exports.handler = async function (event, context, callback) {
-  console.log("==event==")
-  console.log(event)
-  console.log("==event==")
+  // console.log("==event==")
+  // console.log(event)
+  // console.log("==event==")
   try {
     const URI = JSON.parse(
       '{"' + event.body.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
@@ -32,6 +32,31 @@ exports.handler = async function (event, context, callback) {
 
     const originalSender = URI.From.replace("+61", "0")
     const originalBody = URI.Body.replace("+", " ")
+
+    try {
+      const HSSearch = {
+        filterGroups: [
+          {
+            filters: [
+              {
+                propertyName: "mobilephone",
+                operator: "EQ",
+                value: originalSender,
+              },
+            ],
+          },
+        ],
+      }
+
+      fetch(HSContacts + "?hapikey=" + HSKEY, {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(HSSearch),
+      }).then(console.log(JSON.stringify(res)))
+    } catch (err) {
+      console.log("couldn't find HS contact")
+      console.log(err)
+    }
 
     // console.log("SEND_SMS=" + SEND_SMS)
     return callback(null, {
@@ -44,6 +69,7 @@ exports.handler = async function (event, context, callback) {
         "<br/><br/>" +
         "originalBody: " +
         originalBody +
+        "<br/><br/>" +
         "ok computer</body></html > ",
     })
   } catch (err) {
@@ -80,30 +106,7 @@ exports.handler = async function (event, context, callback) {
 //       console.log("couldn't send email")
 //     }
 
-//     try {
-//       const HSSearch = {
-//         filterGroups: [
-//           {
-//             filters: [
-//               {
-//                 propertyName: "mobilephone",
-//                 operator: "EQ",
-//                 value: originalSender,
-//               },
-//             ],
-//           },
-//         ],
-//       }
-
-//       fetch(HSContacts + "?hapikey=" + HSKEY, {
-//         method: "post",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(HSSearch),
-//       }).then(console.log(JSON.stringify(res)))
-//     } catch (err) {
-//       console.log("couldn't find HS contact")
-//       console.log(err)
-//     }*/
+//
 
 /*
   try {
