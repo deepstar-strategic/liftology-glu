@@ -19,68 +19,89 @@ const HSContacts = "https://api.hubapi.com/crm/v3/objects/contacts/search"
 const fetch = require("node-fetch")
 
 exports.handler = async function (event, context, callback) {
-  //   try {
-  //     const URI = JSON.parse(
-  //       '{"' + event.body.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
-  //       function (key, value) {
-  //         return key === "" ? value : decodeURIComponent(value)
-  //       }
-  //     )
+  try {
+    const URI = JSON.parse(
+      '{"' + event.body.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
+      function (key, value) {
+        return key === "" ? value : decodeURIComponent(value)
+      }
+    )
 
-  //     const originalSender = URI.From.replace("+61", "0")
-  //     const originalBody = URI.Body.replace("+", " ")
+    const originalSender = URI.From.replace("+61", "0")
+    const originalBody = URI.Body.replace("+", " ")
 
-  //     const SGMsg = {
-  //       to: SGToEmail,
-  //       from: SGToEmail,
-  //       subject: "New SMS: " + originalSender,
-  //       text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
-  //       html: "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
-  //     }
+    //     const SGMsg = {
+    //       to: SGToEmail,
+    //       from: SGToEmail,
+    //       subject: "New SMS: " + originalSender,
+    //       text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
+    //       html: "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
+    //     }
 
-  //     try {
-  //       sgMail.setApiKey(SGKEY)
+    //     try {
+    //       sgMail.setApiKey(SGKEY)
 
-  //       sgMail
-  //         .send(SGMsg)
-  //         .then(() => {
-  //           console.log("Email Sent")
-  //         })
-  //         .catch((error) => {
-  //           console.error(error)
-  //         })
-  //     } catch (err) {
-  //       console.log("couldn't send email")
-  //     }
+    //       sgMail
+    //         .send(SGMsg)
+    //         .then(() => {
+    //           console.log("Email Sent")
+    //         })
+    //         .catch((error) => {
+    //           console.error(error)
+    //         })
+    //     } catch (err) {
+    //       console.log("couldn't send email")
+    //     }
 
-  //     try {
-  //       const HSSearch = {
-  //         filterGroups: [
-  //           {
-  //             filters: [
-  //               {
-  //                 propertyName: "mobilephone",
-  //                 operator: "EQ",
-  //                 value: originalSender,
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       }
+    //     try {
+    //       const HSSearch = {
+    //         filterGroups: [
+    //           {
+    //             filters: [
+    //               {
+    //                 propertyName: "mobilephone",
+    //                 operator: "EQ",
+    //                 value: originalSender,
+    //               },
+    //             ],
+    //           },
+    //         ],
+    //       }
 
-  //       fetch(HSContacts + "?hapikey=" + HSKEY, {
-  //         method: "post",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify(HSSearch),
-  //       }).then(console.log(JSON.stringify(res)))
-  //     } catch (err) {
-  //       console.log("couldn't find HS contact")
-  //       console.log(err)
-  //     }
-  //   } catch (err) {
-  //     console.log("There was an error")
-  //     console.log(err)
-  //   }
+    //       fetch(HSContacts + "?hapikey=" + HSKEY, {
+    //         method: "post",
+    //         headers: { "Content-Type": "application/json" },
+    //         body: JSON.stringify(HSSearch),
+    //       }).then(console.log(JSON.stringify(res)))
+    //     } catch (err) {
+    //       console.log("couldn't find HS contact")
+    //       console.log(err)
+    //     }*/
+
+    console.log("SEND_SMS=" + SEND_SMS)
+    return callback(null, {
+      statusCode: 200,
+      contentType: "text/html",
+      body:
+        "<html><head><title>a title</title></head><body>SEND_SMS=" +
+        SEND_SMS +
+        "<br/><br/>" +
+        "originalSender: " +
+        originalSender +
+        "<br/><br/>" +
+        "originalBody: " +
+        originalBody +
+        "ok computer</body></html > ",
+    })
+  } catch (err) {
+    console.log("There was an error")
+    console.log(err)
+    return callback(null, {
+      statusCode: 200,
+      ContentType: "text/html",
+      body: "<html><title>title</title><body>" + console.log(err) + "</body></html>,",
+    })
+  }
 
   /*
   try {
@@ -119,14 +140,4 @@ exports.handler = async function (event, context, callback) {
   //   console.log("couldn't console log JSON context")
   //   console.log("this is an error")
   // }
-
-  console.log("SEND_SMS=" + SEND_SMS)
-  return callback(null, {
-    statusCode: 200,
-    contentType: "text/html",
-    body:
-      "<html><head><title>a title</title></head><body>SEND_SMS=" +
-      SEND_SMS +
-      "<br/><br/>ok computer</body></html>",
-  })
 }
