@@ -14,7 +14,7 @@
 // const sgMail = require("@sendgrid/mail")
 
 const HSKEY = process.env.HSKEY
-const HSContacts = "https://api.hubapi.com/crm/v3/objects/contacts/search"
+const HSContacts = "https://api.hubapi.com/crm/v3/objects/contacts/search?hapikey="
 
 const fetch = require("node-fetch")
 
@@ -52,7 +52,15 @@ exports.handler = async function (event, context, callback) {
       console.log(JSON.stringify(HSSearch))
       console.log("==HSSearch==")
 
-      const res = await fetch(HSContacts + "?hapikey=" + HSKEY, {
+      console.log("==HSKEY==")
+      console.log(HSKEY)
+      console.log("==HSKEY==")
+
+      console.log("==URL + HSKEY==")
+      console.log(HSContacts + HSKEY)
+      console.log("==URL + HSKEY==")
+
+      const res = await fetch(HSContacts + HSKEY, {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(HSSearch),
