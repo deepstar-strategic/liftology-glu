@@ -7,11 +7,11 @@
 // const twilioNumberFrom = process.env.TWILIO_SENDER_NUMBER
 
 // const client = require("twilio")(accountSID, accountToken)
-// const MessagingResponse = require("twilio").twiml.MessagingResponse
+const MessagingResponse = require("twilio").twiml.MessagingResponse
 
-// const SGKEY = process.env.SENDGRID_API_KEY
-// const SGToEmail = process.env.SG_TO_EMAIL
-// const sgMail = require("@sendgrid/mail")
+const SGKEY = process.env.SENDGRID_API_KEY
+const SGToEmail = process.env.SG_TO_EMAIL
+const sgMail = require("@sendgrid/mail")
 
 const HSKEY = process.env.HSKEY
 const HSContacts = "https://api.hubapi.com/crm/v3/objects/contacts/search?hapikey="
@@ -49,17 +49,17 @@ exports.handler = async function (event, context, callback) {
         ],
       }
 
-      console.log("==HSSearch==")
-      console.log(JSON.stringify(HSSearch))
-      console.log("==HSSearch==")
+      // console.log("==HSSearch==")
+      // console.log(JSON.stringify(HSSearch))
+      // console.log("==HSSearch==")
 
-      console.log("==HSKEY==")
-      console.log(HSKEY)
-      console.log("==HSKEY==")
+      // console.log("==HSKEY==")
+      // console.log(HSKEY)
+      // console.log("==HSKEY==")
 
-      console.log("==URL + HSKEY==")
-      console.log(HSContacts + HSKEY)
-      console.log("==URL + HSKEY==")
+      // console.log("==URL + HSKEY==")
+      // console.log(HSContacts + HSKEY)
+      // console.log("==URL + HSKEY==")
 
       const resHSContacts = await fetch(HSContacts + HSKEY, {
         method: "post",
@@ -69,19 +69,19 @@ exports.handler = async function (event, context, callback) {
 
       const dataHSContacts = await resHSContacts.json()
 
-      console.log("==fetch==")
-      console.log(JSON.stringify(resHSContacts))
-      console.log("==fetch==")
+      // console.log("==fetch==")
+      // console.log(JSON.stringify(resHSContacts))
+      // console.log("==fetch==")
 
-      console.log("==data==")
-      console.log(JSON.stringify(dataHSContacts))
-      console.log("==data==")
+      // console.log("==data==")
+      // console.log(JSON.stringify(dataHSContacts))
+      // console.log("==data==")
 
       if (dataHSContacts.total > 0) {
         const contactId = dataHSContacts.results[0].id
-        console.log("==contactId==")
-        console.log(contactId)
-        console.log("==contactId==")
+        // console.log("==contactId==")
+        // console.log(contactId)
+        // console.log("==contactId==")
 
         try {
           const HSEngagement = {
@@ -108,13 +108,13 @@ exports.handler = async function (event, context, callback) {
 
           const dataHSEngagement = await resHSEngagements.json()
 
-          console.log("==fetch==")
-          console.log(JSON.stringify(resHSEngagements))
-          console.log("==fetch==")
+          // console.log("==fetch==")
+          // console.log(JSON.stringify(resHSEngagements))
+          // console.log("==fetch==")
 
-          console.log("==data==")
-          console.log(JSON.stringify(dataHSEngagement))
-          console.log("==data==")
+          // console.log("==data==")
+          // console.log(JSON.stringify(dataHSEngagement))
+          // console.log("==data==")
         } catch (err) {
           console.log("couldn't create engagement")
           console.log(err)
@@ -125,90 +125,43 @@ exports.handler = async function (event, context, callback) {
       console.log(err)
     }
 
-    // console.log("SEND_SMS=" + SEND_SMS)
-    return callback(null, {
-      statusCode: 200,
-      contentType: "text/html",
-      body:
-        "<html><head><title>a title</title></head><body>" +
-        "originalSender: " +
-        originalSender +
-        "<br/><br/>" +
-        "originalBody: " +
-        originalBody +
-        "<br/><br/>" +
-        "ok computer</body></html > ",
-    })
+    try {
+      const SGMsg = {
+        to: SGToEmail,
+        from: SGToEmail,
+        subject: "New SMS: " + originalSender,
+        text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
+        html: "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
+      }
+
+      sgMail.setApiKey(SGKEY)
+
+      sgMail
+        .send(SGMsg)
+        .then(() => {
+          console.log("Email Sent")
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    } catch (err) {
+      console.log("couldn't send email")
+    }
+
+    try {
+      const twiml = new MessagingResponse()
+      await twiml.message(
+        "Hello, thank you for replying. Sadly, this number is not monitored. Please SMS 0423233845 directly. Thank you :) STOP to opt out"
+      )
+
+      return callback(null, { statusCode: 200, contentType: "text/xml", body: twiml.toString() })
+    } catch (err) {
+      console.log(err)
+      return callback(null, { statusCode: 500 })
+    }
   } catch (err) {
     console.log("There was an error")
     console.log(err)
-    return callback(null, {
-      statusCode: 200,
-      contentType: "text/html",
-      body: "<html><title>title</title><body>" + err + "</body></html>,",
-    })
-  }
-}
-
-//     const SGMsg = {
-//       to: SGToEmail,
-//       from: SGToEmail,
-//       subject: "New SMS: " + originalSender,
-//       text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
-//       html: "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
-//     }
-
-//     try {
-//       sgMail.setApiKey(SGKEY)
-
-//       sgMail
-//         .send(SGMsg)
-//         .then(() => {
-//           console.log("Email Sent")
-//         })
-//         .catch((error) => {
-//           console.error(error)
-//         })
-//     } catch (err) {
-//       console.log("couldn't send email")
-//     }
-
-//
-
-/*
-  try {
-    const twiml = new MessagingResponse()
-    await twiml.message(
-      "Hello, thank you for replying. Sadly, this number is not monitored. Please SMS 0423233845 directly. Thank you :) STOP to opt out"
-    )
-
-    return callback(null, { statusCode: 200, contentType: "text/xml", body: twiml.toString() })
-  } catch (err) {
     return callback(null, { statusCode: 500 })
   }
-
-*/
-
-// try {
-//   console.log("json stringify event.querystring")
-//   console.log(JSON.stringify(event.queryStringParameters))
-// } catch (err) {
-//   console.log("couldn't console log JSON event querystring")
-//   console.log("this is an error")
-// }
-
-// try {
-//   console.log("event.querystring")
-//   console.log(event.queryStringParameters)
-// } catch (err) {
-//   console.log("couldn't console log event querystring")
-//   console.log("this is an error")
-// }
-
-// try {
-//   console.log("json stringify console")
-//   console.log(JSON.stringify(context))
-// } catch (err) {
-//   console.log("couldn't console log JSON context")
-//   console.log("this is an error")
-// }
+}
