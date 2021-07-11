@@ -15,6 +15,7 @@
 
 const HSKEY = process.env.HSKEY
 const HSContacts = "https://api.hubapi.com/crm/v3/objects/contacts/search?hapikey="
+const HSEngagements = "https://api.hubapi.com/engagements/v1/engagements?hapikey="
 
 const fetch = require("node-fetch")
 
@@ -60,27 +61,64 @@ exports.handler = async function (event, context, callback) {
       console.log(HSContacts + HSKEY)
       console.log("==URL + HSKEY==")
 
-      const res = await fetch(HSContacts + HSKEY, {
+      const resHSContacts = await fetch(HSContacts + HSKEY, {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(HSSearch),
       })
 
-      const data = await res.json()
+      const dataHSContacts = await resHSContacts.json()
 
       console.log("==fetch==")
-      console.log(JSON.stringify(res))
+      console.log(JSON.stringify(resHSContacts))
       console.log("==fetch==")
 
       console.log("==data==")
-      console.log(JSON.stringify(data))
+      console.log(JSON.stringify(dataHSContacts))
       console.log("==data==")
 
-      if (data.total > 0) {
-        const contactId = data.results[0].id
+      if (dataHSContacts.total > 0) {
+        const contactId = dataHSContacts.results[0].id
         console.log("==contactId==")
         console.log(contactId)
         console.log("==contactId==")
+
+        try {
+          const HSEngagement = {
+            engagement: {
+              active: true,
+              type: "NOTE",
+            },
+            associations: {
+              contactIds: [contactId],
+              companyIds: [],
+              dealIds: [],
+              ownerIds: [],
+            },
+            metadata: {
+              body: "Inbound SMS: " + originalBody,
+            },
+          }
+
+          const resHSEngagements = await fetch(HSEngagements + HSKEY, {
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(HSEngagement),
+          })
+
+          const dataHSEngagement = await resHSEngagements.json()
+
+          console.log("==fetch==")
+          console.log(JSON.stringify(resHSEngagements))
+          console.log("==fetch==")
+
+          console.log("==data==")
+          console.log(JSON.stringify(dataHSEngagement))
+          console.log("==data==")
+        } catch (err) {
+          console.log("couldn't create engagement")
+          console.log(err)
+        }
       }
     } catch (err) {
       console.log("couldn't find HS contact")
