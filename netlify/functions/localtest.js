@@ -48,11 +48,18 @@ exports.handler = async function (event, context, callback) {
         ],
       }
 
+      console.log("==HSSearch==")
+      console.log(HSSearch)
+      console.log("==HSSearch==")
+
       fetch(HSContacts + "?hapikey=" + HSKEY, {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(HSSearch),
-      }).then(console.log(JSON.stringify(res)))
+      }).then((res) => res.json())
+      console.log("==fetch==")
+      console.log(JSON.stringify(res))
+      console.log("==fetch==")
     } catch (err) {
       console.log("couldn't find HS contact")
       console.log(err)
