@@ -17,6 +17,7 @@
 // const HSContacts = "https://api.hubapi.com/crm/v3/objects/contacts/search"
 
 // const fetch = require("node-fetch")
+const fetch = require("node-fetch")
 
 exports.handler = async function (event, context, callback) {
   try {
