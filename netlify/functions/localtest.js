@@ -120,9 +120,13 @@ exports.handler = async function (event, context, callback) {
   //   console.log("this is an error")
   // }
 
+  console.log("SEND_SMS=" + SEND_SMS)
   return callback(null, {
     statusCode: 200,
     contentType: "text/html",
-    body: "<html><head><title>" + SEND_SMS + "</title></head><body>ok computer</body></html>",
+    body:
+      "<html><head><title>a title</title></head><body>SEND_SMS=" +
+      SEND_SMS +
+      "<br/><br/>ok computer</body></html>",
   })
 }
