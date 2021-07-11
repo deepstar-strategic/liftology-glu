@@ -17,9 +17,11 @@
 // const HSContacts = "https://api.hubapi.com/crm/v3/objects/contacts/search"
 
 // const fetch = require("node-fetch")
-const fetch = require("node-fetch")
 
 exports.handler = async function (event, context, callback) {
+  console.log("==event==")
+  console.log(event)
+  console.log("==event==")
   try {
     const URI = JSON.parse(
       '{"' + event.body.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
@@ -50,7 +52,7 @@ exports.handler = async function (event, context, callback) {
     return callback(null, {
       statusCode: 200,
       contentType: "text/html",
-      body: "<html><title>title</title><body>" + console.log(err) + "</body></html>,",
+      body: "<html><title>title</title><body>" + err + "</body></html>,",
     })
   }
 }
