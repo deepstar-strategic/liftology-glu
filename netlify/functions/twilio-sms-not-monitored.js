@@ -1,3 +1,4 @@
+const SEND_SMS = process.env.SEND_SMS
 // const qs = require("qs")
 // const querystring = require("querystring")
 
@@ -80,7 +81,7 @@ exports.handler = async function (event, context, callback) {
     console.log("There was an error")
     console.log(err)
   }
-
+  /*
   try {
     const twiml = new MessagingResponse()
     await twiml.message(
@@ -91,6 +92,8 @@ exports.handler = async function (event, context, callback) {
   } catch (err) {
     return callback(null, { statusCode: 500 })
   }
+
+*/
 
   // try {
   //   console.log("json stringify event.querystring")

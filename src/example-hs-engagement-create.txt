@@ -1,0 +1,19 @@
+curl https://api.hubapi.com/engagements/v1/engagements?hapikey=KEYKEYKEY \
+  --request POST \
+  --header "Content-Type: application/json" \
+  --data '{
+    "engagement":{
+        "active":true,
+        "type":"NOTE"
+        },
+    "associations":{
+        "contactIds":[951],
+        "companyIds":[],
+        "dealIds":[],
+        "ownerIds":[]
+    },
+    "metadata": {
+        "body":"this is a test note"
+    }
+}'
+

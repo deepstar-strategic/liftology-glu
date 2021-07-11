@@ -1,0 +1,19 @@
+curl https://api.hubapi.com/crm/v3/objects/contacts/search?hapikey=KEYKEYKEY \
+  --request POST \
+  --header "Content-Type: application/json" \
+  --data '{
+    "filterGroups":[
+      {
+        "filters":[
+          {
+            "propertyName": "mobilephone",
+            "operator": "EQ",
+            "value": "0404021740"
+          }
+        ]
+      }
+    ]
+  }'
+
+
+
