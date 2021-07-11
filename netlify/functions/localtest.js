@@ -49,14 +49,15 @@ exports.handler = async function (event, context, callback) {
       }
 
       console.log("==HSSearch==")
-      console.log(HSSearch)
+      console.log(JSON.stringify(HSSearch))
       console.log("==HSSearch==")
 
-      fetch(HSContacts + "?hapikey=" + HSKEY, {
+      const res = await fetch(HSContacts + "?hapikey=" + HSKEY, {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(HSSearch),
-      }).then((res) => res.json())
+      })
+
       console.log("==fetch==")
       console.log(JSON.stringify(res))
       console.log("==fetch==")
