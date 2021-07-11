@@ -75,6 +75,16 @@ exports.handler = async function (event, context, callback) {
       console.log("==data==")
       console.log(JSON.stringify(data))
       console.log("==data==")
+
+
+      if (data.total > 0) {
+        const contactId = data.results[0].id
+        console.log("==contactId==")
+        console.log(contactId)
+        console.log("==contactId==")
+      }
+}
+
     } catch (err) {
       console.log("couldn't find HS contact")
       console.log(err)
