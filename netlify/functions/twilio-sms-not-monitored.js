@@ -33,7 +33,7 @@ exports.handler = async function (event, context, callback) {
     )
 
     const originalSender = URI.From.replace("+61", "0")
-    const originalBody = URI.Body.replace("/+/g", " ")
+    const originalBody = URI.Body.replaceAll("+", " ")
 
     try {
       const HSSearch = {
