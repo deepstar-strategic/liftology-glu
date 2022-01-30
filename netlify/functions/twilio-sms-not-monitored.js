@@ -33,15 +33,13 @@ exports.handler = async function (event, context, callback) {
     )
 
     const originalSender = URI.From.replace("+61", "0")
-    const originalBody = URI.Body.replace("/\\+/g", "\\s")
+    // const originalBody = URI.Body.replace("/\\+/g", "\\s")
 
     const searchString = "\\+"
     const searchReplaceExp = new RegExp(searchString, "g")
-    // const replaceWith = "\\s"
     const replaceWith = " "
 
-    const result = originalBody.replace(searchReplaceExp, replaceWith)
-    console.log("result: " + result)
+    const originalBody = URI.Body.replace(searchReplaceExp, replaceWith)
     console.log("originalbody: " + originalBody)
 
     try {
