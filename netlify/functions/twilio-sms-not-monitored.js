@@ -33,7 +33,7 @@ exports.handler = async function (event, context, callback) {
     )
 
     const originalSender = URI.From.replace("+61", "0")
-    const originalBody = URI.Body.replace("/+/g", " ")
+    const originalBody = URI.Body.replaceAll("+", " ")
 
     try {
       const HSSearch = {
@@ -127,36 +127,69 @@ exports.handler = async function (event, context, callback) {
     }
 
     try {
-      const SGMsg = {
-        to: SGToEmail,
-        from: SGToEmail,
-        subject: "New SMS: " + originalSender,
-        text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
-        html: "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
+      switch (originalBody.toUpperCase()) {
+        case "YES":
+          try {
+            const twiml = new MessagingResponse()
+            await twiml.message(
+              "Happy to help! To make it easy, simply book a time directly in my calendar at https://www.liftologyproject.com/clubbunker\nThanks, Mitch.\nSTOP to opt out"
+            )
+
+            return callback(null, {
+              statusCode: 200,
+              contentType: "text/xml",
+              body: twiml.toString(),
+            })
+          } catch (err) {
+            console.log("couldn't send next step sms")
+            console.log(err)
+            return callback(null, { statusCode: 500 })
+          }
+        case "NO":
+          break
+        default:
+          try {
+            const SGMsg = {
+              to: SGToEmail,
+              from: SGToEmail,
+              subject: "New SMS: " + originalSender,
+              text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
+              html:
+                "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
+            }
+
+            sgMail.setApiKey(SGKEY)
+
+            sgMail
+              .send(SGMsg)
+              .then(() => {
+                console.log("Email Sent")
+              })
+              .catch((error) => {
+                console.error(error)
+              })
+          } catch (err) {
+            console.log("couldn't send email")
+          }
+
+          try {
+            const twiml = new MessagingResponse()
+            await twiml.message(
+              "Hello, thank you for replying. Sadly, this number is not monitored. Please SMS 0423233845 directly. Thank you :) STOP to opt out"
+            )
+
+            return callback(null, {
+              statusCode: 200,
+              contentType: "text/xml",
+              body: twiml.toString(),
+            })
+          } catch (err) {
+            console.log(err)
+            return callback(null, { statusCode: 500 })
+          }
       }
-
-      sgMail.setApiKey(SGKEY)
-
-      sgMail
-        .send(SGMsg)
-        .then(() => {
-          console.log("Email Sent")
-        })
-        .catch((error) => {
-          console.error(error)
-        })
     } catch (err) {
-      console.log("couldn't send email")
-    }
-
-    try {
-      const twiml = new MessagingResponse()
-      await twiml.message(
-        "Hello, thank you for replying. Sadly, this number is not monitored. Please SMS 0423233845 directly. Thank you :) STOP to opt out"
-      )
-
-      return callback(null, { statusCode: 200, contentType: "text/xml", body: twiml.toString() })
-    } catch (err) {
+      console.log("there was an error")
       console.log(err)
       return callback(null, { statusCode: 500 })
     }
