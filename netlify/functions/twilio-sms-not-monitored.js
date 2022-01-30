@@ -33,7 +33,15 @@ exports.handler = async function (event, context, callback) {
     )
 
     const originalSender = URI.From.replace("+61", "0")
-    const originalBody = URI.Body.replace("/\\+/g", " ")
+    const originalBody = URI.Body.replace("/\\+/g", "\\s")
+
+    const searchString = "\\+"
+    const searchReplaceExp = new RegExp(searchString, "g")
+    const replaceWith = "s"
+
+    const result = originalBody.replace(searchReplaceExp, replaceWith)
+    console.log("result: " + result)
+    console.log("originalbody: " + originalBody)
 
     try {
       const HSSearch = {
