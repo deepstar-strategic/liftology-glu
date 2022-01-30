@@ -37,7 +37,8 @@ exports.handler = async function (event, context, callback) {
 
     const searchString = "\\+"
     const searchReplaceExp = new RegExp(searchString, "g")
-    const replaceWith = "\\s"
+    // const replaceWith = "\\s"
+    const replaceWith = " "
 
     const result = originalBody.replace(searchReplaceExp, replaceWith)
     console.log("result: " + result)
