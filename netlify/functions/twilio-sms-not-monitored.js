@@ -152,7 +152,22 @@ exports.handler = async function (event, context, callback) {
             console.log(err)
             return callback(null, { statusCode: 500 })
           }
+          break
         case "NO":
+          try {
+            const twiml = new MessagingResponse()
+            await twiml.message(
+              "No worries. If things change, always happy to chat. STOP to opt out"
+            )
+            return callback(null, {
+              statusCode: 200,
+              contentType: "text/xml",
+              body: twiml.toString(),
+            })
+          } catch (err) {
+            console.log(err)
+            return callback(null, { statusCode: 500 })
+          }
           break
         default:
           try {
