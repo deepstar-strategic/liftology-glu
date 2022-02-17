@@ -134,6 +134,29 @@ exports.handler = async function (event, context, callback) {
     }
 
     try {
+      const SGMsg = {
+        to: SGToEmail,
+        from: SGToEmail,
+        subject: "New SMS: " + originalSender,
+        text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
+        html: "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
+      }
+
+      sgMail.setApiKey(SGKEY)
+
+      sgMail
+        .send(SGMsg)
+        .then(() => {
+          console.log("Email Sent")
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    } catch (err) {
+      console.log("couldn't send email")
+    }
+
+    try {
       switch (originalBody.toUpperCase()) {
         case "YES":
           try {
@@ -170,29 +193,29 @@ exports.handler = async function (event, context, callback) {
           }
           break
         default:
-          try {
-            const SGMsg = {
-              to: SGToEmail,
-              from: SGToEmail,
-              subject: "New SMS: " + originalSender,
-              text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
-              html:
-                "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
-            }
+          // try {
+          //   const SGMsg = {
+          //     to: SGToEmail,
+          //     from: SGToEmail,
+          //     subject: "New SMS: " + originalSender,
+          //     text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
+          //     html:
+          //       "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
+          //   }
 
-            sgMail.setApiKey(SGKEY)
+          //   sgMail.setApiKey(SGKEY)
 
-            sgMail
-              .send(SGMsg)
-              .then(() => {
-                console.log("Email Sent")
-              })
-              .catch((error) => {
-                console.error(error)
-              })
-          } catch (err) {
-            console.log("couldn't send email")
-          }
+          //   sgMail
+          //     .send(SGMsg)
+          //     .then(() => {
+          //       console.log("Email Sent")
+          //     })
+          //     .catch((error) => {
+          //       console.error(error)
+          //     })
+          // } catch (err) {
+          //   console.log("couldn't send email")
+          // }
 
           try {
             const twiml = new MessagingResponse()
