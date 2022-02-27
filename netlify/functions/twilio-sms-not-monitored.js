@@ -162,7 +162,7 @@ exports.handler = async function (event, context, callback) {
           try {
             const twiml = new MessagingResponse()
             await twiml.message(
-              "Happy to help! To make it easy, simply book a time directly in my calendar at https://www.liftologyproject.com/clubbunker\nThanks, Mitch.\nSTOP to opt out"
+              "Happy to help! To make it easy, simply book a time directly in our calendars at https://www.liftologyproject.com/clubbunker\nThanks, Mitch & Alex.\nSTOP to opt out"
             )
 
             return callback(null, {
