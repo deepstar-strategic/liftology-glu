@@ -90,6 +90,9 @@ exports.handler = async function (event, context, callback) {
         const contactFName = dataHSContacts.results[0].firstname || "unknown"
         const contactLName = dataHSContacts.results[0].lastname || "unknown"
         const contactEmail = dataHSContacts.results[0].email || "unknown"
+        console.log("fname: " + dataHSContacts.results[0].firstname)
+        console.log("lname: " + dataHSContacts.results[0].lastname)
+        console.log("email: " + dataHSContacts.results[0].email)
         // console.log("==contactId==")
         console.log(contactId)
         // console.log("==contactId==")
