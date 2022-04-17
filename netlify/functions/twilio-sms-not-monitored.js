@@ -144,8 +144,10 @@ exports.handler = async function (event, context, callback) {
         html: "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
       }
 
+      console.log("SG: set api key")
       sgMail.setApiKey(SGKEY)
 
+      console.log("SG: send mail")
       sgMail
         .send(SGMsg)
         .then(() => {
@@ -240,6 +242,15 @@ exports.handler = async function (event, context, callback) {
     //   console.log(err)
     //   return callback(null, { statusCode: 500 })
     // }
+
+    // temp return twilio empty 200
+    try {
+      return callback(null, { statusCode: 200 })
+    } catch (err) {
+      console.log("there was an error")
+      console.log(err)
+    }
+    //  end temp return twilio empty 200
   } catch (err) {
     console.log("There was an error")
     console.log(err)
