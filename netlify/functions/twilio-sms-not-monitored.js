@@ -57,17 +57,17 @@ exports.handler = async function (event, context, callback) {
         ],
       }
 
-      console.log("==HSSearch==")
+      // console.log("==HSSearch==")
       console.log(JSON.stringify(HSSearch))
-      console.log("==HSSearch==")
+      // console.log("==HSSearch==")
 
-      console.log("==HSKEY==")
+      // console.log("==HSKEY==")
       console.log(HSKEY)
-      console.log("==HSKEY==")
+      // console.log("==HSKEY==")
 
-      console.log("==URL + HSKEY==")
+      // console.log("==URL + HSKEY==")
       console.log(HSContacts + HSKEY)
-      console.log("==URL + HSKEY==")
+      // console.log("==URL + HSKEY==")
 
       const resHSContacts = await fetch(HSContacts + HSKEY, {
         method: "post",
@@ -77,19 +77,19 @@ exports.handler = async function (event, context, callback) {
 
       const dataHSContacts = await resHSContacts.json()
 
-      console.log("==fetch==")
+      // console.log("==fetch==")
       console.log(JSON.stringify(resHSContacts))
-      console.log("==fetch==")
+      // console.log("==fetch==")
 
-      console.log("==data==")
+      // console.log("==data==")
       console.log(JSON.stringify(dataHSContacts))
-      console.log("==data==")
+      // console.log("==data==")
 
       if (dataHSContacts.total > 0) {
         const contactId = dataHSContacts.results[0].id
-        console.log("==contactId==")
+        // console.log("==contactId==")
         console.log(contactId)
-        console.log("==contactId==")
+        // console.log("==contactId==")
 
         try {
           const HSEngagement = {
@@ -116,13 +116,13 @@ exports.handler = async function (event, context, callback) {
 
           const dataHSEngagement = await resHSEngagements.json()
 
-          console.log("==fetch==")
-          console.log(JSON.stringify(resHSEngagements))
-          console.log("==fetch==")
+          // console.log("==fetch==")
+          // console.log(JSON.stringify(resHSEngagements))
+          // console.log("==fetch==")
 
-          console.log("==data==")
-          console.log(JSON.stringify(dataHSEngagement))
-          console.log("==data==")
+          // console.log("==data==")
+          // console.log(JSON.stringify(dataHSEngagement))
+          // console.log("==data==")
         } catch (err) {
           console.log("couldn't create engagement")
           console.log(err)
@@ -133,7 +133,9 @@ exports.handler = async function (event, context, callback) {
       console.log(err)
     }
 
+    console.log("about to enter coach email try")
     try {
+      console.log("setup email to coach")
       const SGMsg = {
         to: SGToEmail,
         from: SGToEmail,
