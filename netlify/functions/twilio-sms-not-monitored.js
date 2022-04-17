@@ -87,12 +87,12 @@ exports.handler = async function (event, context, callback) {
 
       if (dataHSContacts.total > 0) {
         const contactId = dataHSContacts.results[0].id
-        const contactFName = dataHSContacts.results[0].firstname || "unknown"
-        const contactLName = dataHSContacts.results[0].lastname || "unknown"
-        const contactEmail = dataHSContacts.results[0].email || "unknown"
-        console.log("fname: " + dataHSContacts.results[0].firstname)
-        console.log("lname: " + dataHSContacts.results[0].lastname)
-        console.log("email: " + dataHSContacts.results[0].email)
+        const contactFName = dataHSContacts.results[0].properties.firstname || "unknown"
+        const contactLName = dataHSContacts.results[0].properties.lastname || "unknown"
+        const contactEmail = dataHSContacts.results[0].properties.email || "unknown"
+        console.log("fname: " + dataHSContacts.results[0].properties.firstname)
+        console.log("lname: " + dataHSContacts.results[0].properties.lastname)
+        console.log("email: " + dataHSContacts.results[0].properties.email)
         // console.log("==contactId==")
         console.log(contactId)
         // console.log("==contactId==")
