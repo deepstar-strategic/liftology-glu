@@ -87,6 +87,9 @@ exports.handler = async function (event, context, callback) {
 
       if (dataHSContacts.total > 0) {
         const contactId = dataHSContacts.results[0].id
+        const contactFName = dataHSContacts.results[0].firstname || "unknown"
+        const contactLName = dataHSContacts.results[0].lastname || "unknown"
+        const contactEmail = dataHSContacts.results[0].email || "unknown"
         // console.log("==contactId==")
         console.log(contactId)
         // console.log("==contactId==")
@@ -123,6 +126,58 @@ exports.handler = async function (event, context, callback) {
           // console.log("==data==")
           // console.log(JSON.stringify(dataHSEngagement))
           // console.log("==data==")
+
+          console.log("about to enter coach email try")
+          try {
+            console.log("setup email to coach")
+            const SGMsg = {
+              to: SGToEmail,
+              from: SGToEmail,
+              subject: "New SMS: " + originalSender + ": " + contactFName + " " + contactLName,
+              text:
+                "New SMS from: " +
+                originalSender +
+                "\n\n\nName: " +
+                contactFName +
+                " " +
+                contactLName +
+                "\n\nEmail: " +
+                contactEmail +
+                "\n\nHubspot Contact Record: https://app.hubspot.com/contacts/20057928/contact/" +
+                dataHSContacts.results[0].id +
+                "\n\n Body:\n\n" +
+                originalBody,
+              html:
+                "New SMS From: " +
+                originalSender +
+                "<br/><br/>Name: " +
+                contactFName +
+                " " +
+                contactLName +
+                "<br/><br/>Email: " +
+                contactEmail +
+                '<br/><br/><a href="https://app.hubspot.com/contacts/20057928/contact/' +
+                dataHSContacts.results[0].id +
+                '">Hubspot Contact Record</a><br/><br/>' +
+                "<br/><br/>Body:<br/><br/>" +
+                originalBody,
+            }
+
+            console.log("SG: set api key")
+            sgMail.setApiKey(SGKEY)
+
+            console.log("SG: send mail")
+            sgMail
+              .send(SGMsg)
+              .then(() => {
+                console.log("Email Sent")
+              })
+              .catch((error) => {
+                console.error(error)
+              })
+          } catch (err) {
+            console.log("couldn't send email")
+          }
         } catch (err) {
           console.log("couldn't create engagement")
           console.log(err)
@@ -131,33 +186,6 @@ exports.handler = async function (event, context, callback) {
     } catch (err) {
       console.log("couldn't find HS contact")
       console.log(err)
-    }
-
-    console.log("about to enter coach email try")
-    try {
-      console.log("setup email to coach")
-      const SGMsg = {
-        to: SGToEmail,
-        from: SGToEmail,
-        subject: "New SMS: " + originalSender,
-        text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
-        html: "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
-      }
-
-      console.log("SG: set api key")
-      sgMail.setApiKey(SGKEY)
-
-      console.log("SG: send mail")
-      sgMail
-        .send(SGMsg)
-        .then(() => {
-          console.log("Email Sent")
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    } catch (err) {
-      console.log("couldn't send email")
     }
 
     // try {
