@@ -122,13 +122,13 @@ exports.handler = async function (event, context, callback) {
 
           const dataHSEngagement = await resHSEngagements.json()
 
-          // console.log("==fetch==")
-          // console.log(JSON.stringify(resHSEngagements))
-          // console.log("==fetch==")
+          console.log("==fetch==")
+          console.log(JSON.stringify(resHSEngagements))
+          console.log("==fetch==")
 
-          // console.log("==data==")
-          // console.log(JSON.stringify(dataHSEngagement))
-          // console.log("==data==")
+          console.log("==data==")
+          console.log(JSON.stringify(dataHSEngagement))
+          console.log("==data==")
 
           console.log("about to enter coach email try")
           try {
@@ -191,96 +191,96 @@ exports.handler = async function (event, context, callback) {
       console.log(err)
     }
 
-    // try {
-    //   switch (originalBody.toUpperCase()) {
-    //     case "YES":
-    //       try {
-    //         const twiml = new MessagingResponse()
-    //         await twiml.message(
-    //           "Happy to help! To make it easy, simply book a time directly in our calendars at https://www.liftologyproject.com/clubbunker\nThanks, Mitch & Alex.\nSTOP to opt out"
-    //         )
-
-    //         return callback(null, {
-    //           statusCode: 200,
-    //           contentType: "text/xml",
-    //           body: twiml.toString(),
-    //         })
-    //       } catch (err) {
-    //         console.log("couldn't send next step sms")
-    //         console.log(err)
-    //         return callback(null, { statusCode: 500 })
-    //       }
-    //       break
-    //     case "NO":
-    //       try {
-    //         const twiml = new MessagingResponse()
-    //         await twiml.message(
-    //           "No worries. If things change, always happy to chat. STOP to opt out"
-    //         )
-    //         return callback(null, {
-    //           statusCode: 200,
-    //           contentType: "text/xml",
-    //           body: twiml.toString(),
-    //         })
-    //       } catch (err) {
-    //         console.log(err)
-    //         return callback(null, { statusCode: 500 })
-    //       }
-    //       break
-    //     default:
-    //       // try {
-    //       //   const SGMsg = {
-    //       //     to: SGToEmail,
-    //       //     from: SGToEmail,
-    //       //     subject: "New SMS: " + originalSender,
-    //       //     text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
-    //       //     html:
-    //       //       "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
-    //       //   }
-
-    //       //   sgMail.setApiKey(SGKEY)
-
-    //       //   sgMail
-    //       //     .send(SGMsg)
-    //       //     .then(() => {
-    //       //       console.log("Email Sent")
-    //       //     })
-    //       //     .catch((error) => {
-    //       //       console.error(error)
-    //       //     })
-    //       // } catch (err) {
-    //       //   console.log("couldn't send email")
-    //       // }
-
-    //       try {
-    //         const twiml = new MessagingResponse()
-    //         await twiml.message(
-    //           "Hello, thank you for replying. Sadly, this number is not monitored. Please SMS 0423233845 directly. Thank you :) STOP to opt out"
-    //         )
-
-    //         return callback(null, {
-    //           statusCode: 200,
-    //           contentType: "text/xml",
-    //           body: twiml.toString(),
-    //         })
-    //       } catch (err) {
-    //         console.log(err)
-    //         return callback(null, { statusCode: 500 })
-    //       }
-    //   }
-    // } catch (err) {
-    //   console.log("there was an error")
-    //   console.log(err)
-    //   return callback(null, { statusCode: 500 })
-    // }
-
-    // temp return twilio empty 200
     try {
-      return callback(null, { statusCode: 200 })
+      switch (originalBody.toUpperCase()) {
+        case "YES":
+          try {
+            const twiml = new MessagingResponse()
+            await twiml.message(
+              "Happy to help! To make it easy, simply book a time directly in our calendars at https://www.liftologyproject.com/clubbunker\nThanks, Mitch & Alex.\nSTOP to opt out"
+            )
+
+            return callback(null, {
+              statusCode: 200,
+              contentType: "text/xml",
+              body: twiml.toString(),
+            })
+          } catch (err) {
+            console.log("couldn't send next step sms")
+            console.log(err)
+            return callback(null, { statusCode: 500 })
+          }
+          break
+        case "NO":
+          try {
+            const twiml = new MessagingResponse()
+            await twiml.message(
+              "No worries. If things change, always happy to chat. STOP to opt out"
+            )
+            return callback(null, {
+              statusCode: 200,
+              contentType: "text/xml",
+              body: twiml.toString(),
+            })
+          } catch (err) {
+            console.log(err)
+            return callback(null, { statusCode: 500 })
+          }
+          break
+        default:
+          // try {
+          //   const SGMsg = {
+          //     to: SGToEmail,
+          //     from: SGToEmail,
+          //     subject: "New SMS: " + originalSender,
+          //     text: "New SMS from: " + originalSender + "\n\n\nBody:\n\n" + originalBody,
+          //     html:
+          //       "New SMS From: " + originalSender + "<br/><br/><br/>Body:<br/><br/>" + originalBody,
+          //   }
+
+          //   sgMail.setApiKey(SGKEY)
+
+          //   sgMail
+          //     .send(SGMsg)
+          //     .then(() => {
+          //       console.log("Email Sent")
+          //     })
+          //     .catch((error) => {
+          //       console.error(error)
+          //     })
+          // } catch (err) {
+          //   console.log("couldn't send email")
+          // }
+
+          try {
+            const twiml = new MessagingResponse()
+            await twiml.message(
+              "Hello, thank you for replying. Sadly, this number is not monitored. Please SMS 0423233845 directly. Thank you :) STOP to opt out"
+            )
+
+            return callback(null, {
+              statusCode: 200,
+              contentType: "text/xml",
+              body: twiml.toString(),
+            })
+          } catch (err) {
+            console.log(err)
+            return callback(null, { statusCode: 500 })
+          }
+      }
     } catch (err) {
       console.log("there was an error")
       console.log(err)
+      return callback(null, { statusCode: 500 })
     }
+
+    // // temp return twilio empty 200
+    // try {
+    //   return callback(null, { statusCode: 200 })
+    // } catch (err) {
+    //   console.log("there was an error")
+    //   console.log(err)
+    // }
     //  end temp return twilio empty 200
   } catch (err) {
     console.log("There was an error")
